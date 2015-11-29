@@ -8,6 +8,7 @@ To run;
 $ git clone https://github.com/bohalloran/personal-work
 $ git fetch
 $ git pull
+$ git checkout wayfair
 $ chmod 755 matrix_cross_product.py test_matrix_cross_product.py
 $ python test_matrix_cross_product.py 
 ...
