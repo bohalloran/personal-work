@@ -22,6 +22,7 @@ class EncodeString(object):
 
         # parse string and count occurrences
         # stuff the results in an list of pairs
+        # TODO: Seems like we could use an in line string instead of list
         for i in self.input:
             if i == self.previous:
                 self.results[-1] = (i, self.results[-1][1] + 1)

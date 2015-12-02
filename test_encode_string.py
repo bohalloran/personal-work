@@ -8,6 +8,7 @@ import unittest
 from encode_string import EncodeString
 
 class TestEncodeString(unittest.TestCase):
+    # TODO: Think about and add some more test cases, negative ones?
 
     def setUp(self):
         return
