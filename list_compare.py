@@ -1,9 +1,10 @@
-
-'''
+"""
 Created on 30 Nov 2015
 
 @author: bohalloran
-'''
+"""
+
+# Class that compares two lists
 
 class ListCompare(object):
 

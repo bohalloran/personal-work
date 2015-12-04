@@ -1,8 +1,8 @@
-'''
+"""
 Created on 30 Nov 2015
 
 @author: bohalloran
-'''
+"""
 
 import unittest
 from list_compare import ListCompare
