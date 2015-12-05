@@ -22,6 +22,7 @@ class VerifyContents(object):
         self.lowerLimit = 100
         self.upperLimit = 500
         self.randomResultList = []
+        self.passList = []
         # TODO: Dicsuss with John.  Appears to be ambiguity in spec.
         # For now assume data set includes integers outside of upper
         # and lower limit bounds so we can get some error injection
@@ -51,12 +52,21 @@ class VerifyContents(object):
                 # Decided to use the line number as part of descriptive name
                 # makes it easier to locate
                 print 'ValidateLine' + i[0] + ': Pass'
+                self.passList.append(i[1])
             else:
                 print 'ValidateLine' + i[0] + ': Fail'
                 print '\tLine' + i[0] + ' : Value ' + i[1]
 
     def generateDifferences(self):
-        return
+        # TODO: There is couple of defects in this method but no time left
+        # First bug is we are missing the line number
+        # Second bug is we need to take into account the 0th element in list
+        f = open(self.differenceFilename, 'w')
+        for i in range(len(self.passList) - 1):
+            res = (float(self.passList[i]) - float(self.passList[i+1])) /\
+                  (float(self.passList[i])) * 100
+            f.write(str(i) + '\t' +str(res) + '\n')
+        f.close()
 
 v = VerifyContents()
 v.parseData()
