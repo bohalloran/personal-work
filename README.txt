@@ -3,7 +3,7 @@ See enclosed excercise requirements 'RecruitingCodingExerciseNo.5QACodingExercis
 
 To run (option A);
 $ tar -zxvf verify_contents.tgz
-$ chmod 755 *.py
+$ chmod 755 VerifyContents.py
 $ python VerifyContents.py
 
 To run (option B);
