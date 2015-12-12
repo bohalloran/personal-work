@@ -70,7 +70,7 @@ class MonitorDaemon(object):
 
     def dumpStats(self, status, numFileHandles):
         # TODO: dump in json format
-        # TODO: ran out of time, need to finish implementing core and daemon memory
+        # TODO: ran out of time, need to finish implementing core/daemon mem
         self._displayStatus(status, numFileHandles)
         print '\n****Memory useage of server****\n' + self.meminfo()
         print '\n****Memory useage of daemon****\n'
@@ -80,23 +80,28 @@ class MonitorDaemon(object):
 
     def lsofHandles(self):
         # TODO: Add some error checking around invalid PID
+        # TODO: Package this method in a separate library class for general use
         commandToken = self.numFileHandlesCmd
         # throw away the first line of lsof header output for accurate count
         return int(self._runCmd(commandToken)) - 1
 
     def meminfo(self):
+        # TODO: Package this method in a separate library class for general use
         commandToken = self.meminfoCmd
         return self._runCmd(commandToken)
 
     def systemLoad(self):
+        # TODO: Package this method in a separate library class for general use
         commandToken = self.systemLoadCmd
         return self._runCmd(commandToken)
 
     def lsof(self):
+        # TODO: Package this method in a separate library class for general use
         commandToken = self.lsofCmd + self.pid
         return self._runCmd(commandToken)
 
     def core(self):
+        # TODO: Package this method in a separate library class for general use
         commandToken = self.coreCmd + self.pid
         return self._runCmd(commandToken)
 
