@@ -19,11 +19,11 @@ as a client server model, where the client is the Mac host and the server is
 the vagrant guest.
 '''
 
-import sys
-import time
-import datetime
-from fabric.api                     import env, hide, settings, sudo
-import                              constants
+import                  sys
+import                  time
+import                  datetime
+from fabric.api         import env, hide, settings, sudo
+import                  constants
 
 class MonitorDaemon(object):
 
@@ -48,7 +48,8 @@ class MonitorDaemon(object):
         self.header = 'DATE\tPID\tHANDLES\tSTATUS'
 
         # define our command set
-        self.numFileHandlesCmd = constants.LSOF_CMD + self.pid + '|' + constants.WC_CMD
+        self.numFileHandlesCmd = constants.LSOF_CMD + self.pid + '|' + \
+                                 constants.WC_CMD
         self.meminfoCmd = constants.MEMINFO_CMD
         self.systemLoadCmd = constants.SYSTEM_LOAD_CMD
         self.lsofCmd = constants.LSOF_CMD
