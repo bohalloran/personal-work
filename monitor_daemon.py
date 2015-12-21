@@ -19,23 +19,16 @@ as a client server model, where the client is the Mac host and the server is
 the vagrant guest.
 '''
 
-import                  sys
-import                  time
-import                  datetime
-from fabric.api         import env, hide, settings, sudo
-import                  constants
+import                      sys
+import                      time
+import                      datetime
+from lib.commands           import Commands
 
 class MonitorDaemon(object):
 
     def __init__(self):
         # TODO: Add some intellegent command line parsing
         self.pid = sys.argv[1]
-
-        # Setup our fabric environment
-        env.host_string = constants.SYSTEM_UNDER_TEST
-        env.user = constants.SCALITY_USER
-        env.password = constants.SCALITY_PASSWORD
-        env.timeout = constants.REQUEST_TIMOUT
 
         # Define some parameters for monitoring daemon
         self.monitorWait = 5
@@ -47,16 +40,10 @@ class MonitorDaemon(object):
         # self.statusSevere = 'WARNING'
         self.header = 'DATE\tPID\tHANDLES\tSTATUS'
 
-        # define our command set
-        self.numFileHandlesCmd = constants.LSOF_CMD + self.pid + '|' + \
-                                 constants.WC_CMD
-        self.meminfoCmd = constants.MEMINFO_CMD
-        self.systemLoadCmd = constants.SYSTEM_LOAD_CMD
-        self.lsofCmd = constants.LSOF_CMD
-        self.coreCmd = constants.CORE_CMD
+        self.cmds = Commands(self.pid)
 
     def monitorProcess(self):
-        numFileHandles = self.lsofHandles()
+        numFileHandles = self.cmds.lsofHandles()
         status = self.statusOK
         # TODO: In general, replace all print with a log handler
         print self.header
@@ -64,7 +51,7 @@ class MonitorDaemon(object):
         while numFileHandles < self.acceptableFileHandleLimit:
             self._displayStatus(status, numFileHandles)
             time.sleep(self.monitorWait)
-            numFileHandles = self.lsofHandles()
+            numFileHandles = self.cmds.lsofHandles()
 
         # File handles exceeded
         self.dumpStats(self.statusSevere, numFileHandles)
@@ -73,42 +60,11 @@ class MonitorDaemon(object):
         # TODO: dump in json format
         # TODO: ran out of time, need to finish implementing core/daemon mem
         self._displayStatus(status, numFileHandles)
-        print '\n****Memory useage of server****\n' + self.meminfo()
+        print '\n****Memory useage of server****\n' + self.cmds.meminfo()
         print '\n****Memory useage of daemon****\n'
-        print '\n****Current load of system****\n' + self.systemLoad()
-        print '\n****List of all opened files in daemon****\n' + self.lsof()
+        print '\n****Current load of system****\n' + self.cmds.systemLoad()
+        print '\n****List of all opened files in daemon****\n' + self.cmds.lsof()
         print '\n****Generate a core dump****\n'
-
-    def lsofHandles(self):
-        # TODO: Add some error checking around invalid PID
-        # TODO: Package this method in a separate library class for general use
-        commandToken = self.numFileHandlesCmd
-        # throw away the first line of lsof header output for accurate count
-        return int(self._runCmd(commandToken)) - 1
-
-    def meminfo(self):
-        # TODO: Package this method in a separate library class for general use
-        commandToken = self.meminfoCmd
-        return self._runCmd(commandToken)
-
-    def systemLoad(self):
-        # TODO: Package this method in a separate library class for general use
-        commandToken = self.systemLoadCmd
-        return self._runCmd(commandToken)
-
-    def lsof(self):
-        # TODO: Package this method in a separate library class for general use
-        commandToken = self.lsofCmd + self.pid
-        return self._runCmd(commandToken)
-
-    def core(self):
-        # TODO: Package this method in a separate library class for general use
-        commandToken = self.coreCmd + self.pid
-        return self._runCmd(commandToken)
-
-    def _runCmd(self, cmd):
-        with hide('output','running','warnings'), settings(warn_only=True):
-            return sudo(cmd)
 
     def _displayStatus(self, status, numFileHandles):
         # TODO: We should be writing this out a .csv
