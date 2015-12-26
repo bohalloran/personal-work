@@ -54,9 +54,9 @@ class MonitorDaemon(object):
             numFileHandles = self.cmds.lsofHandles()
 
         # File handles exceeded
-        self.dumpStats(self.statusSevere, numFileHandles)
+        self._dumpStats(self.statusSevere, numFileHandles)
 
-    def dumpStats(self, status, numFileHandles):
+    def _dumpStats(self, status, numFileHandles):
         # TODO: dump in json format
         # TODO: ran out of time, need to finish implementing core/daemon mem
         self._displayStatus(status, numFileHandles)
