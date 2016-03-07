@@ -30,8 +30,8 @@ class Commands(object):
     def lsofHandles(self):
         # TODO: Add some error checking around invalid PID
         commandToken = self.numFileHandlesCmd
-        # throw away the first line of lsof header output for accurate count
-        return int(self._runCmd(commandToken)) - 1
+        # throw away the first two lines of lsof header output
+        return int(self._runCmd(commandToken).splitlines()[2]) - 1
 
     def meminfo(self):
         commandToken = self.meminfoCmd
