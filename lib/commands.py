@@ -13,9 +13,14 @@ class Commands(object):
         # define our command set
         self.bsfCmd = constants.BS_FEATURE
         self.getPostgresCmd = constants.GET_POSTGRES
+        self.chownBitsightCmd = constants.CHOWN_BITSIGHT
 
     def bs_feature(self):
         command_token = self.bsfCmd
+        return self._run_cmd(command_token)
+
+    def chown_bitsight(self):
+        command_token = self.chownBitsightCmd
         return self._run_cmd(command_token)
 
     def _run_cmd(self, cmd):

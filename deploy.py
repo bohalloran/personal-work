@@ -18,11 +18,16 @@ class Deploy(object):
     # TODO: check that build ran OK
     # TODO: check that build numbers compare
     # TODO: write output to log file
+    # TODO: prompt for system under test
     def deploy_build(self):
         print 'Starting deploy ...'
         out = self.cmds.bs_feature()
+        self._chown_deploy()
         for line in out.split("/n"):
             print line
+
+    def _chown_deploy(self):
+        self.cmds.chown_bitsight()
 
     def get_postgres(self):
         return
