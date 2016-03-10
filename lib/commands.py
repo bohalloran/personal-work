@@ -14,6 +14,7 @@ class Commands(object):
         self.bsfCmd = constants.BS_FEATURE
         self.getPostgresCmd = constants.GET_POSTGRES
         self.chownBitsightCmd = constants.CHOWN_BITSIGHT
+        self.chefClientCmd = constants.CHEF_CLIENT
 
     def bs_feature(self):
         command_token = self.bsfCmd
@@ -23,6 +24,15 @@ class Commands(object):
         command_token = self.chownBitsightCmd
         return self._run_cmd(command_token)
 
+    def get_postgres(self):
+        command_token = self.getPostgresCmd
+        return self._run_cmd(command_token)
+
+    def chef_client(self):
+        command_token = self.chefClientCmd
+        return self._run_cmd(command_token)
+
+    # TODO: we need to stream the output so that callers can see
     def _run_cmd(self, cmd):
         with hide('output', 'running', 'warnings'), settings(warn_only=True):
             return sudo(cmd)

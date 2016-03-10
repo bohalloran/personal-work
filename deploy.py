@@ -15,8 +15,8 @@ class Deploy(object):
     def __init__(self):
         self.cmds = Commands()
 
-    # TODO: check that build ran OK
-    # TODO: check that build numbers compare
+    # TODO: check that deploy ran OK
+    # TODO: check that build and deploy id numbers compare
     # TODO: write output to log file
     # TODO: prompt for system under test
     def deploy_build(self):
@@ -29,8 +29,16 @@ class Deploy(object):
     def _chown_deploy(self):
         self.cmds.chown_bitsight()
 
+    # TODO: check that get_postgres ran OK
     def get_postgres(self):
-        return
+        print 'Starting get_postgres ...'
+        out = self.cmds.get_postgres()
+        for line in out.split("/n"):
+            print line
 
+    # TODO: check that chef-client ran OK
     def chef_client(self):
-        return
+        print 'Starting chef-client ...'
+        out = self.cmds.chef_client()
+        for line in out.split("/n"):
+            print line
