@@ -32,7 +32,7 @@ class Commands(object):
         command_token = self.chefClientCmd
         return self._run_cmd(command_token)
 
-    # TODO: we need to stream the output so that callers can see
+    # TODO: we need to stream the output so that callers can see progress
     def _run_cmd(self, cmd):
         with hide('output', 'running', 'warnings'), settings(warn_only=True):
             return sudo(cmd)
