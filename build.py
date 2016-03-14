@@ -20,29 +20,30 @@ class Build(object):
         # TODO: add logging into a base class
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s %(levelname)s %(message)s')
+        self.jenkins_url = 'http://bs101.ops.ame1.bitsighttech.com:8080'
+        self.project_name = 'Build-Apt-Feature-Merge'
         self.si = self.get_server_instance()
 
     def get_server_instance(self):
 
         # TODO: prompt for password
         # get username and password from Jenkins/Configure/API Token
-        jenkins_url = 'http://bs101.ops.ame1.bitsighttech.com:8080'
-        logging.info('Connecting to build server %s ...' % jenkins_url)
-        server_instance = Jenkins(jenkins_url, username='',
-                         password='')
+        logging.info('Connecting to build server %s ...' % self.jenkins_url)
+        server_instance = Jenkins(self.jenkins_url, username='',
+                                  password='')
         return server_instance
 
     def build_apt_packages(self):
         # start/create buld job
         # TODO: prompt for 'branch' and 'targetbranch'
-        branch = 'feature/edq/rp-12140'
-        targetbranch = 'master'
+        branch = 'feature/edq/rp12130-new-pdns-cron'
+        targetbranch = 'feature/edq/shady-page-integration'
         logging.info('Creating build for branch %s ...' % branch)
-        self.si.build_job('Build-Apt-Feature-Merge',
-                                  params={'branch': branch,
-                                          'targetbranch': targetbranch})
+        self.si.build_job(self.project_name,
+                          params={'branch': branch, 'targetbranch': targetbranch})
         job = self.si.get_job('Build-Apt-Feature-Merge')
         build_num = job.get_next_build_number()
+        # TODO: Need timeout if is_queued_or_running() does not return
         while job.is_queued_or_running():
             logging.info('Waiting for build %s to finish ...' % build_num)
             sleep(10)
@@ -55,3 +56,9 @@ class Build(object):
         else:
             logging.warning('Finished: FAILURE')
         logging.info('Job logs can be found at %sconsoleText' % job.get_build_dict()[build_num])
+
+    def get_last_build_description(self):
+        j = self.si.get_job(self.project_name)
+        b = j.get_last_build()
+        t = b.get_timestamp()
+        logging.info('Build description: %s \n Build Time: %s\n' % (b, t))
