@@ -34,5 +34,5 @@ class Commands(object):
 
     # TODO: we need to stream the output so that callers can see progress
     def _run_cmd(self, cmd):
-        with hide('output', 'running', 'warnings'), settings(warn_only=True):
+        with hide('running', 'warnings'), settings(warn_only=True):
             return sudo(cmd)

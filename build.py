@@ -29,7 +29,8 @@ class Build(object):
         # TODO: prompt for password
         # get username and password from Jenkins/Configure/API Token
         logging.info('Connecting to build server %s ...' % self.jenkins_url)
-        server_instance = Jenkins(self.jenkins_url, username='',
+        server_instance = Jenkins(self.jenkins_url,
+                                  username='',
                                   password='')
         return server_instance
 
@@ -55,10 +56,11 @@ class Build(object):
             logging.info('Finished: SUCCESS')
         else:
             logging.warning('Finished: FAILURE')
-        logging.info('Job logs can be found at %sconsoleText' % job.get_build_dict()[build_num])
+        logging.info('Job logs can be found at %sconsoleText' %
+                     job.get_build_dict()[build_num])
 
     def get_last_build_description(self):
         j = self.si.get_job(self.project_name)
         b = j.get_last_build()
-        t = b.get_timestamp()
-        logging.info('Build description: %s \n Build Time: %s\n' % (b, t))
+        logging.info('\nBuild Description: %s\nBuild Date: %s\nBuild Status: %s'
+                     % (str(b), b.get_timestamp(), b.get_status()))

@@ -26,10 +26,8 @@ class Deploy(object):
     # TODO: Check and make sure we aren't clobbering someones build
     def deploy_build(self):
         logging.info('Starting deploy ...')
-        out = self.cmds.bs_feature()
+        self.cmds.bs_feature()
         self._chown_deploy()
-        for line in out.split("/n"):
-            print line
 
     def _chown_deploy(self):
         self.cmds.chown_bitsight()
@@ -37,13 +35,9 @@ class Deploy(object):
     # TODO: check that get_postgres ran OK
     def get_postgres(self):
         logging.info('Starting get_postgres ...')
-        out = self.cmds.get_postgres()
-        for line in out.split("/n"):
-            print line
+        self.cmds.get_postgres()
 
     # TODO: check that chef-client ran OK
     def chef_client(self):
         logging.info('Starting chef-client ...')
-        out = self.cmds.chef_client()
-        for line in out.split("/n"):
-            print line
+        self.cmds.chef_client()
