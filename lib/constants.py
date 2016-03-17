@@ -1,6 +1,6 @@
 # fabric settings
 REQUEST_TIMOUT = 120.0
-SYSTEM_UNDER_TEST = 'em101.edq2.ame1.bitsighttech.com'
+SYSTEM_UNDER_TEST = 'em102.public.ame1.bitsighttech.com'
 
 # command line settings
 BS_FEATURE = 'sudo apt-get update;sudo apt-get install -y -t feature --only-upgrade bs-.*'
