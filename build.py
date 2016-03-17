@@ -1,6 +1,7 @@
 import logging
 from jenkinsapi.jenkins import Jenkins
 from time import sleep
+import lib.constants
 
 # bohalloran@ubuntu:~/personal-work$ python
 # Python 2.7.6 (default, Jun 22 2015, 17:58:13)
@@ -20,7 +21,7 @@ class Build(object):
         # TODO: add logging into a base class
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s %(levelname)s %(message)s')
-        self.jenkins_url = 'http://bs101.ops.ame1.bitsighttech.com:8080'
+        self.jenkins_url = lib.constants.BUILD_SERVER
         self.project_name = 'Build-Apt-Feature-Merge'
         self.si = self.get_server_instance()
         self.job = self.si.get_job(self.project_name)
