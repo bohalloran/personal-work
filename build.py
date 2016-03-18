@@ -23,10 +23,14 @@ class Build(object):
                             format='%(asctime)s %(levelname)s %(message)s')
         self.jenkins_url = lib.constants.BUILD_SERVER
         self.project_name = 'Build-Apt-Feature-Merge'
-        self.si = self.get_server_instance()
-        self.job = self.si.get_job(self.project_name)
+        self.username = ''
+        self.password = ''
         self.branch = 'feature/edq/pdnsautomapper'
         self.targetbranch = 'master'
+        self.si = self.get_server_instance()
+        self.job = self.si.get_job(self.project_name)
+        self.build_num = self.job.get_next_build_number()
+        self.last_build_num = self.job.get_last_completed_buildnumber()
         self._get_last_build_description()
 
     def get_server_instance(self):
@@ -35,8 +39,8 @@ class Build(object):
         # get username and password from Jenkins/Configure/API Token
         logging.info('Connecting to build server %s ...' % self.jenkins_url)
         server_instance = Jenkins(self.jenkins_url,
-                                  username='',
-                                  password='')
+                                  self.username,
+                                  self.password)
         return server_instance
 
     def build_apt_packages(self):
@@ -47,28 +51,25 @@ class Build(object):
         self.si.build_job(self.project_name,
                           params={'branch': self.branch,
                                   'targetbranch': self.targetbranch})
-        build_num = self.job.get_next_build_number()
         # TODO: Need timeout if is_queued_or_running() does not return
         while self.job.is_queued_or_running():
-            logging.info('Waiting for build %s to finish ...' % build_num)
+            logging.info('Waiting for build %s to finish ...' % self.build_num)
             sleep(10)
 
         # TODO: make sure build completed successfully, throws exception?
         # TODO: collect logs from jenkins and write to log file
         # might be better to look at last line of output for SUCCESS/FAILURE
         self._get_last_build_description()
-        if int(build_num) == int(self.job.get_last_good_buildnumber()):
+        if int(self.build_num) == int(self.job.get_last_good_buildnumber()):
             logging.info('Finished: SUCCESS')
         else:
             logging.warning('Finished: FAILURE')
-        # logging.info('Job logs can be found at %sconsoleText' %
-        #             self.job.get_build_dict()[build_num])
 
     def _get_last_build_description(self):
         b = self.job.get_last_build()
         last_build_dict = self.job.get_build_dict()
         log_url = '%sconsoleText' % \
-                  last_build_dict[sorted(last_build_dict.keys())[-1]]
+                  last_build_dict[self.last_build_num]
         logging.info('\nBuild Description: %s\nBuild Date: %s'
                      '\nBuild Status: %s\nBuild Logs: %s' %
                      (str(b), b.get_timestamp(), b.get_status(), log_url))
