@@ -15,7 +15,7 @@ class Build(object):
         # get username and password from Jenkins/Configure/API Token
         self.username = 'bohalloran@bitsighttech.com'
         self.password = 'a46e9502085ff9f78f3fbdb6b7540a90'
-        self.branch = 'fixes/edq/pdnsautomapper-1'
+        self.branch = 'feature/edq/domaintool-autofetch-integration'
         self.targetbranch = 'master'
         self.si = self.get_server_instance()
         self.job = self.si.get_job(self.project_name)
@@ -48,7 +48,6 @@ class Build(object):
             sleep(10)
         # TODO: make sure build completed successfully, throws exception?
         # might be better to look at last line of output for SUCCESS/FAILURE
-        self._get_last_build_description()
         if int(self.build_num) == int(self.job.get_last_good_buildnumber()):
             logging.info('Finished: SUCCESS')
         else:
@@ -56,13 +55,14 @@ class Build(object):
         logging.info('Writing build results from console output to %s' %
                      self.build_log_file_name)
         f = open(self.build_log_file_name, 'wb')
-        f.write(self.last_build.get_console())
+        f.write(self.job.get_build(self.build_num).get_console())
         f.close()
 
     def _get_last_build_description(self):
         last_build_dict = self.job.get_build_dict()
         log_url = '%sconsoleText' % \
                   last_build_dict[self.last_build_num]
+        logging.info('Information about the last build ...')
         logging.info('\nBuild Description: %s\nBuild Date: %s'
                      '\nBuild Status: %s\nBuild Logs: %s' %
                      (str(self.last_build), self.last_build.get_timestamp(),
