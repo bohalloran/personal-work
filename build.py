@@ -1,7 +1,8 @@
 import logging
+import datetime
+import lib.constants
 from jenkinsapi.jenkins import Jenkins
 from time import sleep
-import lib.constants
 
 
 class Build(object):
@@ -13,20 +14,23 @@ class Build(object):
         self.jenkins_url = lib.constants.BUILD_SERVER
         self.project_name = 'Build-Apt-Feature-Merge'
         # get username and password from Jenkins/Configure/API Token
-        self.username = 'bohalloran@bitsighttech.com'
-        self.password = 'a46e9502085ff9f78f3fbdb6b7540a90'
-        self.branch = 'feature/edq/domaintool-autofetch-integration'
-        self.targetbranch = 'master'
-        self.si = self.get_server_instance()
+        self.username = ''
+        self.password = ''
+        self.branch = 'feature/edq/rp-12290'
+        self.targetbranch = 'feature/edq/domaintool-autofetch-integration'
+        self.si = self._get_server_instance()
         self.job = self.si.get_job(self.project_name)
         self.build_num = self.job.get_next_build_number()
         self.last_build = self.job.get_last_build()
         self.last_build_num = self.job.get_last_completed_buildnumber()
-        # don't like this file name needs more info like the date, etc...
-        self.build_log_file_name = 'build_log_build_%s' % self.build_num
+        date_time = datetime.datetime.now().\
+            strftime(lib.constants.LOG_FILE_DATE_TIME_FORMAT)
+        self.build_log_file_name = 'build_log_build_%s_%s' % \
+                                   (self.build_num,
+                                    date_time)
         self._get_last_build_description()
 
-    def get_server_instance(self):
+    def _get_server_instance(self):
         # TODO: prompt for password
         logging.info('Connecting to build server %s ...' % self.jenkins_url)
         server_instance = Jenkins(self.jenkins_url,
@@ -54,7 +58,7 @@ class Build(object):
             logging.warning('Finished: FAILURE')
         logging.info('Writing build results from console output to %s' %
                      self.build_log_file_name)
-        f = open(self.build_log_file_name, 'wb')
+        f = open(self.build_log_file_name, 'a')
         f.write(self.job.get_build(self.build_num).get_console())
         f.close()
 
@@ -67,3 +71,9 @@ class Build(object):
                      '\nBuild Status: %s\nBuild Logs: %s' %
                      (str(self.last_build), self.last_build.get_timestamp(),
                       self.last_build.get_status(), log_url))
+
+    def get_build_num(self):
+        if self.job.is_queued_or_running():
+            return self.build_num
+        else:
+            return self.last_build_num

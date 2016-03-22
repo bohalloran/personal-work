@@ -2,6 +2,7 @@
 REQUEST_TIMOUT = 120.0
 SYSTEM_UNDER_TEST = 'em102.public.ame1.bitsighttech.com'
 BUILD_SERVER = 'http://bs101.ops.ame1.bitsighttech.com:8080'
+LOG_FILE_DATE_TIME_FORMAT = "%Y%m%dT%H%M%S"
 
 # command line settings
 BS_FEATURE = 'sudo apt-get update;sudo apt-get install -y -t feature --only-upgrade bs-.*'
