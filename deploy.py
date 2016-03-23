@@ -2,18 +2,15 @@ import logging
 import datetime
 import lib.constants
 from lib.commands import Commands
-from build import Build
 
 
 class Deploy(object):
 
-    def __init__(self):
-        # TODO: add logging into a base class
+    def __init__(self, build_num):
+        # TODO: move logging definition into a base class
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s %(levelname)s %(message)s')
         self.cmds = Commands()
-        build = Build()
-        build_num = build.get_build_num()
         date_time = datetime.datetime.now().\
             strftime(lib.constants.LOG_FILE_DATE_TIME_FORMAT)
         self.get_postgres_log_file_name = 'get_postgres_log_build_%s_%s' % \

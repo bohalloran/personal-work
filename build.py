@@ -8,7 +8,7 @@ from time import sleep
 class Build(object):
 
     def __init__(self):
-        # TODO: add logging into a base class
+        # TODO: move logging definition into a base class
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s %(levelname)s %(message)s')
         self.jenkins_url = lib.constants.BUILD_SERVER
@@ -16,8 +16,8 @@ class Build(object):
         # get username and password from Jenkins/Configure/API Token
         self.username = ''
         self.password = ''
-        self.branch = 'feature/edq/rp-12290'
-        self.targetbranch = 'feature/edq/domaintool-autofetch-integration'
+        self.branch = 'fix/edq/approver-page-improvement'
+        self.targetbranch = 'master'
         self.si = self._get_server_instance()
         self.job = self.si.get_job(self.project_name)
         self.build_num = self.job.get_next_build_number()
@@ -41,7 +41,7 @@ class Build(object):
     def build_apt_packages(self):
         # start/create buld job
         # TODO: prompt for 'branch' and 'targetbranch'
-        # TODO: run Build.build_apt_packages() and Deploy.get_postgres parallel
+        # TODO: check to see of the branch exists
         logging.info('Creating build for branch %s ...' % self.branch)
         self.si.build_job(self.project_name,
                           params={'branch': self.branch,
@@ -73,7 +73,4 @@ class Build(object):
                       self.last_build.get_status(), log_url))
 
     def get_build_num(self):
-        if self.job.is_queued_or_running():
             return self.build_num
-        else:
-            return self.last_build_num
