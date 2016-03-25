@@ -16,8 +16,8 @@ class Build(object):
         # get username and password from Jenkins/Configure/API Token
         self.username = ''
         self.password = ''
-        self.branch = 'fix/edq/approver-page-improvement'
-        self.targetbranch = 'master'
+        self.branch = 'fix/edq/domaintool-bugs'
+        self.targetbranch = 'feature/edq/domaintool-autofetch-integration'
         self.si = self._get_server_instance()
         self.job = self.si.get_job(self.project_name)
         self.build_num = self.job.get_next_build_number()
@@ -58,6 +58,7 @@ class Build(object):
             logging.warning('Finished: FAILURE')
         logging.info('Writing build results from console output to %s' %
                      self.build_log_file_name)
+        # TODO: use jenkinsapi.artifact.Artifact instead
         f = open(self.build_log_file_name, 'a')
         f.write(self.job.get_build(self.build_num).get_console())
         f.close()

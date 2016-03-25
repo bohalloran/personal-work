@@ -20,24 +20,24 @@ class Deploy(object):
         self.chef_client_log_file_name = 'chef_client_log_build_%s_%s' % \
                                          (build_num, date_time)
 
-    # TODO: check that deploy ran OK
-    # TODO: check that build and deploy pkg numbers compare
-    # TODO: prompt for system under test
-    # TODO: Check and make sure we aren't clobbering someones build
     def bs_feature(self):
+        # TODO: check that deploy ran OK
+        # TODO: check that build and deploy pkg numbers compare
+        # TODO: prompt for system under test
+        # TODO: Check and make sure we aren't clobbering someones build
         logging.info('Starting deploy ...')
         stdout = self.cmds.bs_feature()
         self._write_logs(self.bs_feature_log_file_name, stdout)
         self.cmds.chown_bitsight()
 
-    # TODO: check that get_postgres ran OK
     def get_postgres(self):
+        # TODO: check that get_postgres ran OK
         logging.info('Starting get_postgres ...')
         stdout = self.cmds.get_postgres()
         self._write_logs(self.get_postgres_log_file_name, stdout)
 
-    # TODO: check that chef-client ran OK
     def chef_client(self):
+        # TODO: check that chef-client ran OK
         logging.info('Starting chef-client ...')
         stdout = self.cmds.chef_client()
         self._write_logs(self.chef_client_log_file_name, stdout)
