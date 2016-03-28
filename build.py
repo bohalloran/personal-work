@@ -14,6 +14,7 @@ class Build(object):
         self.jenkins_url = lib.constants.BUILD_SERVER
         self.project_name = 'Build-Apt-Feature-Merge'
         # get username and password from Jenkins/Configure/API Token
+        # TODO: maybe we should be using jenkinsapi.credentials.Credentials
         self.username = ''
         self.password = ''
         self.branch = 'fix/edq/domaintool-bugs'

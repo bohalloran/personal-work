@@ -7,11 +7,11 @@ from deploy import Deploy
 
 class BuildDeploy(object):
 
-    def __init__(self):
+    def __init__(self, system_under_test):
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s %(levelname)s %(message)s')
         self.b = Build()
-        self.d = Deploy(self.b.get_build_num())
+        self.d = Deploy(self.b.get_build_num(), system_under_test)
 
     def execute_build_deploy(self):
         # do everything: build, get_postgres, bs_feature and chef-client
@@ -38,5 +38,5 @@ class BuildDeploy(object):
         logging.info('Start chef-client ...')
         self.d.chef_client()
 
-bd = BuildDeploy()
+bd = BuildDeploy('em102.public.ame1.bitsighttech.com')
 bd.execute_build_deploy()

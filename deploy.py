@@ -6,11 +6,11 @@ from lib.commands import Commands
 
 class Deploy(object):
 
-    def __init__(self, build_num):
+    def __init__(self, build_num, system_under_test):
         # TODO: move logging definition into a base class
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s %(levelname)s %(message)s')
-        self.cmds = Commands()
+        self.cmds = Commands(system_under_test)
         date_time = datetime.datetime.now().\
             strftime(lib.constants.LOG_FILE_DATE_TIME_FORMAT)
         self.get_postgres_log_file_name = 'get_postgres_log_build_%s_%s' % \

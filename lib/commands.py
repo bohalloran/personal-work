@@ -4,10 +4,10 @@ import constants
 
 class Commands(object):
 
-    def __init__(self):
+    def __init__(self, system_under_test):
 
         # Setup our fabric environment
-        env.host_string = constants.SYSTEM_UNDER_TEST
+        env.host_string = system_under_test
         env.timeout = constants.REQUEST_TIMOUT
 
         # define our command set
