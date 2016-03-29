@@ -1,6 +1,22 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+'''
+Build and depoly tool: Performs a feature build, restores postgres DB,
+then deploys code to remote host and runs chef-client.
+
+Usage:
+    build_deploy.py <BRANCH> <TARGET-BRANCH> <UID> <PASSWD> <SYSTEM-UNDER-TEST>
+    build_deploy.py -h | --help | --version
+
+Arguments:
+    BRANCH              test branch, e.g.fix/emdq/RP-12604
+    TARGET-BRANCH       merge branch, e.g. master
+    UID                 jenkins "User ID", e.g. bohalloran@bitsighttech.com
+    PASSWD              jenkins "API Token", e.g. 4dc8.....................ac98
+    SYSTEM-UNDER-TEST   system under test, e.g. em102.public.ame1.bitsighttech.com
+'''
 
 import logging
+from docopt import docopt
 from build import Build
 from deploy import Deploy
 
@@ -38,9 +54,11 @@ class BuildDeploy(object):
         logging.info('Start chef-client ...')
         self.d.chef_client()
 
-bd = BuildDeploy('feature/edq/domaintool-autofetch-integration',
-                 'master',
-                 'bohalloran@bitsighttech.com',
-                 '4dc8be6c1e251c9736ca5ef1defbac98',
-                 'em102.public.ame1.bitsighttech.com')
-bd.execute_build_deploy()
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='Build Deploy v1.0')
+    bd = BuildDeploy(arguments['<BRANCH>'],
+                     arguments['<TARGET-BRANCH>'],
+                     arguments['<UID>'],
+                     arguments['<PASSWD>'],
+                     arguments['<SYSTEM-UNDER-TEST>'])
+    bd.execute_build_deploy()
