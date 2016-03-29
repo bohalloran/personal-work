@@ -7,10 +7,10 @@ from deploy import Deploy
 
 class BuildDeploy(object):
 
-    def __init__(self, system_under_test):
+    def __init__(self, branch, targetbranch, uname, passwd, system_under_test):
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s %(levelname)s %(message)s')
-        self.b = Build()
+        self.b = Build(branch, targetbranch, uname, passwd)
         self.d = Deploy(self.b.get_build_num(), system_under_test)
 
     def execute_build_deploy(self):
@@ -38,5 +38,9 @@ class BuildDeploy(object):
         logging.info('Start chef-client ...')
         self.d.chef_client()
 
-bd = BuildDeploy('em102.public.ame1.bitsighttech.com')
+bd = BuildDeploy('feature/edq/domaintool-autofetch-integration',
+                 'master',
+                 'bohalloran@bitsighttech.com',
+                 '4dc8be6c1e251c9736ca5ef1defbac98',
+                 'em102.public.ame1.bitsighttech.com')
 bd.execute_build_deploy()

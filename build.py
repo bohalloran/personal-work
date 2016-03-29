@@ -7,20 +7,20 @@ from time import sleep
 
 class Build(object):
 
-    def __init__(self):
+    def __init__(self, branch, targetbranch, uname, passwd):
         # TODO: move logging definition into a base class
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s %(levelname)s %(message)s')
         self.jenkins_url = lib.constants.BUILD_SERVER
-        self.project_name = 'Build-Apt-Feature-Merge'
+        self.jenkins_project_name = lib.constants.JENKINS_PROJECT_NAME
         # get username and password from Jenkins/Configure/API Token
         # TODO: maybe we should be using jenkinsapi.credentials.Credentials
-        self.username = ''
-        self.password = ''
-        self.branch = 'fix/edq/domaintool-bugs'
-        self.targetbranch = 'feature/edq/domaintool-autofetch-integration'
+        self.branch = branch
+        self.targetbranch = targetbranch
+        self.username = uname
+        self.password = passwd
         self.si = self._get_server_instance()
-        self.job = self.si.get_job(self.project_name)
+        self.job = self.si.get_job(self.jenkins_project_name)
         self.build_num = self.job.get_next_build_number()
         self.last_build = self.job.get_last_build()
         self.last_build_num = self.job.get_last_completed_buildnumber()
@@ -44,7 +44,7 @@ class Build(object):
         # TODO: prompt for 'branch' and 'targetbranch'
         # TODO: check to see of the branch exists
         logging.info('Creating build for branch %s ...' % self.branch)
-        self.si.build_job(self.project_name,
+        self.si.build_job(self.jenkins_project_name,
                           params={'branch': self.branch,
                                   'targetbranch': self.targetbranch})
         # TODO: Need timeout if is_queued_or_running() does not return
@@ -59,7 +59,7 @@ class Build(object):
             logging.warning('Finished: FAILURE')
         logging.info('Writing build results from console output to %s' %
                      self.build_log_file_name)
-        # TODO: use jenkinsapi.artifact.Artifact instead
+        # TODO: use jenkinsapi.artifact.Artifact instead?
         f = open(self.build_log_file_name, 'a')
         f.write(self.job.get_build(self.build_num).get_console())
         f.close()
