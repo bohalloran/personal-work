@@ -7,7 +7,10 @@ $ chmod 755 VerifyContents.py
 $ python VerifyContents.py
 
 To run (option B);
+via HTTP
 $ git clone https://github.com/bohalloran/personal-work
+via SSH
+$ git clone git@github.com:bohalloran/personal-work
 $ git fetch
 $ git pull
 $ git checkout bitsight
