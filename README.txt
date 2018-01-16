@@ -6,7 +6,7 @@ To run;
 $ git clone https://github.com/bohalloran/personal-work
 $ git fetch
 $ git pull
-$ git checkout amazon
+$ git checkout encode-string
 $ chmod 755 encode_string.py test_encode_string.py
 $ python test_encode_string.py
 ......
