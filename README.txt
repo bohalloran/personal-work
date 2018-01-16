@@ -5,7 +5,7 @@ To run;
 $ git clone https://github.com/bohalloran/personal-work
 $ git fetch
 $ git pull
-$ git checkout datarobot
+$ git checkout fibonacci
 $ chmod 755 *.py
 $ python test_list_compare.py
 ...
