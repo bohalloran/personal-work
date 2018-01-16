@@ -13,7 +13,7 @@ via SSH
 $ git clone git@github.com:bohalloran/personal-work
 $ git fetch
 $ git pull
-$ git checkout bitsight
+$ git checkout verify-contents
 $ chmod 755 VerifyContents.py
 $ python VerifyContents.py
 
