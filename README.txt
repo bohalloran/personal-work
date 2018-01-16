@@ -12,7 +12,7 @@ To run:
 $ git clone https://github.com/bohalloran/personal-work
 $ git fetch
 $ git pull
-$ git checkout scality
+$ git checkout monitor-daemon
 $ chmod 755 monitor_daemon.py
 $ python monitor_daemon.py 1305
 
